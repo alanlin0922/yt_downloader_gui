@@ -6,7 +6,7 @@ import os
 import platform
 
 #Version
-APP_NAME = "Youtube Downloader"
+APP_NAME = "YouTube Downloader"
 APP_VERSION = "v1.0.0"
 
 #Globel Variables

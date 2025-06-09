@@ -5,6 +5,7 @@ A lightweight Python GUI tool to download YouTube videos in MP4 or MP3 format us
 ## Download
 
 Click [yt_download_gui.zip](https://github.com/alanlin0922/yt_downloader_gui/releases) to download the app source code.
+
 Unzip the folder and run `yt_gui.py` (requires Python installed).
 
 ## Features
@@ -41,10 +42,13 @@ python yt_gui.py
 pip install yt-dlp
 ```
 3. Install ffmpeg
+
 **For Windows:**
 - `ffmpeg.exe` is already included in the downloaded zip (do not delete it)
 - Make sure `ffmpeg.exe` is placed in the same folder as `yt_gui.py`
+
 Or download manually: [https://www.gyan.dev/ffmpeg/builds/](https://www.gyan.dev/ffmpeg/builds/)
+
 **For macOS:**
 ```bash
 brew install ffmpeg
@@ -53,4 +57,5 @@ brew install ffmpeg
 ## For Developers
 
 You’re welcome to modify or extend the app using the included `yt_gui.py`.
+
 Version control and updates are managed on this GitHub repository.

@@ -4,10 +4,11 @@ import yt_dlp
 import threading
 import os
 import platform
+import urllib.parse
 
 #Version
 APP_NAME = "YouTube Downloader"
-APP_VERSION = "v1.0.0"
+APP_VERSION = "v1.0.1"
 
 #Globel Variables
 available_formats = []
@@ -38,7 +39,12 @@ entry_url.pack(side=tk.LEFT, padx=(0,5), expand=True, fill="x")
 
 #def: click "get Formats button"
 def fetch_formats():
-    url = entry_url.get()
+    
+
+    raw_url = entry_url.get()
+    url = clean_youtube_url(raw_url)
+
+
     if not url:
         messagebox.showwarning("Error", "Please enter a URL")
         return
@@ -55,10 +61,12 @@ def fetch_formats():
 
         try:
             ydl_opts = {
-                'quiet': True,
+                #'quiet': True, 
                 'skip_download': True,
                 'forcejson': True,
                 'simulate': True,
+                'extractor_args': {'youtube': ['player_client=android']}, 
+                'noplaylist': True,  #only capture a single video
             }
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url,download=False)
@@ -153,13 +161,36 @@ progress_bar.pack(side=tk.LEFT, padx=(0,5), fill="x",expand=True)
 
 # --------- Download Button ---------
 
+
+
+def clean_youtube_url(raw_url):
+    """
+    keep the single video URL: v=xxx, and remove parameters: list=xxx index=xxx
+    """
+    parsed = urllib.parse.urlparse(raw_url)
+    query = urllib.parse.parse_qs(parsed.query)
+
+    if 'v' in query:
+        clean_qs = f"v={query['v'][0]}"
+        return f"https://www.youtube.com/watch?{clean_qs}"
+    else:
+        return raw_url
+
+
+
+
+
 #def: click "download button"
 def download_video():
 
     status_text.set("Downloading...")
     progress_bar["value"] = 0
 
-    url = entry_url.get()
+
+    raw_url = entry_url.get()
+    url = clean_youtube_url(raw_url)
+
+
     folder =download_path.get()
     fmt_idx = listbox_format.curselection()
     fmt_type = format_var.get()
@@ -247,7 +278,8 @@ def download_video():
             ydl_opts.update({
                 'format': f"{fmt_selected['format_id']}+bestaudio/best",
                 'merge_output_format': 'mp4',
-                'ffmpeg_location': ffmpeg_exec
+                'ffmpeg_location': ffmpeg_exec,
+                'extractor_args': {'youtube': ['player_client=android']} 
             })
 
         elif fmt_type == "mp3":
@@ -258,7 +290,8 @@ def download_video():
                     'preferredcodec': 'mp3',
                     'preferredquality': '192'
                 }],
-                'ffmpeg_location': ffmpeg_exec
+                'ffmpeg_location': ffmpeg_exec,
+                'extractor_args': {'youtube': ['player_client=android']} 
             })
 
         try:

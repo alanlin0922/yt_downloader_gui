@@ -2,3 +2,7 @@ ffmpeg.exe
 dist/
 build/
 *.spec
+venv/
+__pycache__/
+*.pyc
+.env

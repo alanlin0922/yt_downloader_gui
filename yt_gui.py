@@ -8,7 +8,7 @@ import urllib.parse
 
 #Version
 APP_NAME = "YouTube Downloader"
-APP_VERSION = "v1.0.1"
+APP_VERSION = "v1.0.2"
 
 #Globel Variables
 available_formats = []
@@ -63,10 +63,15 @@ def fetch_formats():
             ydl_opts = {
                 #'quiet': True, 
                 'skip_download': True,
-                'forcejson': True,
+                #'forcejson': True, #1.0.2: remove
                 'simulate': True,
-                'extractor_args': {'youtube': ['player_client=android']}, 
+                #'extractor_args': {'youtube': ['player_client=android']}, #1.0.2: remove
                 'noplaylist': True,  #only capture a single video
+                 'extractor_args': { #1.0.2: add
+                  'youtube': ['player_client=tv']
+                 }
+                       
+                                  
             }
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url,download=False)
@@ -256,9 +261,12 @@ def download_video():
 
 
         ydl_opts = {
-            'format': fmt_selected['format_id'],
+            #'format': fmt_selected['format_id'], #1.0.2: remove
             'outtmpl': out_template,
             'progress_hooks': [progress_hook],
+            'extractor_args': { #1.0.2: add
+                  'youtube': ['player_client=tv']
+                 }
         }
 
 
@@ -279,7 +287,7 @@ def download_video():
                 'format': f"{fmt_selected['format_id']}+bestaudio/best",
                 'merge_output_format': 'mp4',
                 'ffmpeg_location': ffmpeg_exec,
-                'extractor_args': {'youtube': ['player_client=android']} 
+                #'extractor_args': {'youtube': ['player_client=android']}  #1.0.2: remove
             })
 
         elif fmt_type == "mp3":
@@ -291,7 +299,7 @@ def download_video():
                     'preferredquality': '192'
                 }],
                 'ffmpeg_location': ffmpeg_exec,
-                'extractor_args': {'youtube': ['player_client=android']} 
+                #'extractor_args': {'youtube': ['player_client=android']}  #1.0.2: remove
             })
 
         try:
